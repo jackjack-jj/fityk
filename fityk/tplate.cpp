@@ -263,6 +263,49 @@ void TplateMgr::add_builtin_types(Parser* p)
         "x < center ? Voigt(height, center, hwhm1, shape1)"
                   " : Voigt(height, center, hwhm2, shape2)",
         /*linear_d=*/false, /*peak_d=*/true, &create_SplitFunction, p);
+
+    add("StepGauss", "height,center,fwhmG", "height,center,2*hwhm",
+        "height*(0.5+0.5*erf((x-center)/(fwhmG/1.665)))",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CustomFunction, p);
+
+    add("StepLorentz", "height,center,fwhmL", "height,center,2*hwhm",
+        "height*(0.5+1/pi*atan((x-center)/(fwhmL/2)))",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CustomFunction, p);
+
+    add("FanoProfile", "sigc,sia,sib,q,egap,gamma,etrap,eoff", "center,1,1,1,1,hwhm,1,1",
+        "sigc*(sia*(((q + (x - (eoff + egap-etrap))/(0.5*gamma))^2)"
+		"/(1 + ((x - (eoff + egap-etrap))/(0.5*gamma))^2)) + sib)",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CustomFunction, p);
+
+    add("SCoreLevel",
+        "height,center,hwhm,shape",
+        ",,,0.5",
+        "Voigt(height,center,hwhm,shape)",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CompoundFunction, p);
+
+    add("Pcorelevel",
+        "height,center,hwhm,shape,splitting",
+        ",,,0.5,5",
+        "Voigt(height*1/2,center-splitting,hwhm,shape)+Voigt(height,center,hwhm,shape)",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CompoundFunction, p);
+
+    add("Dcorelevel",
+        "height,center,hwhm,shape,splitting",
+        ",,,0.5,5",
+        "Voigt(height*2/3,center-splitting,hwhm,shape)+Voigt(height,center,hwhm,shape)",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CompoundFunction, p);
+
+    add("Fcorelevel",
+        "height,center,hwhm,shape,splitting",
+        ",,,0.5,5",
+        "Voigt(height*3/4,center-splitting,hwhm,shape)+Voigt(height,center,hwhm,shape)",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CompoundFunction, p);
+
+    add("APcorelevel",
+        "height,center,hwhm,shape,ratio,splitting",
+        ",,,0.5,1,5",
+        "Voigt(height*ratio,center-splitting,hwhm,shape)+Voigt(height,center,hwhm,shape)",
+        /*linear_d=*/false, /*peak_d=*/true, &create_CompoundFunction, p);
 }
 
 void TplateMgr::define(Tplate::Ptr tp)
