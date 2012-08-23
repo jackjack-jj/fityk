@@ -1,6 +1,7 @@
 // This file is part of fityk program. Copyright (C) Marcin Wojdyr
 // Licence: GNU General Public License ver. 2+
 
+#include <wx/sysopt.h>
 #include <wx/wx.h>
 #include <wx/cmdline.h>
 #include <wx/fileconf.h>
@@ -176,7 +177,10 @@ bool FApp::OnInit(void)
     if (signal (SIGINT, interrupt_handler) == SIG_IGN)
         signal (SIGINT, SIG_IGN);
 #endif //_WIN32
-
+#ifdef __WXMAC__
+	wxSystemOptions::SetOption(wxT("mac.listctrl.always_use_generic"), true);
+#endif
+	
     SetAppName(wxT("fityk"));
 
     // if options can be parsed
