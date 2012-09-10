@@ -28,11 +28,6 @@ doc/screenshots/*.png
 ! doc/screenshots/fityk076.png
 src/cmpfit/
 .DS_Store
-
 autogenmac.sh
-
 xylib/specsxml.cpp
-
 xylib/specsxy.cpp
-
-xylib/spectra.cpp
